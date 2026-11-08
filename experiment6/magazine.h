@@ -24,6 +24,10 @@ public:
     int getBorrowedCount() const override;
     bool increaseQuantity(int amount) override;
     bool decreaseQuantity(int amount) override;
+    
+    string getIssueNumber() const;
+	string getPublicationCycle() const;
+	int getTotalQuantity() const override;
 };
 
 #endif

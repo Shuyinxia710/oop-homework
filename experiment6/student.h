@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
@@ -27,7 +28,9 @@ public:
 
     int getBorrowedResourceCount() const;
     void showBorrowedResources() const;
+
+    void saveToFile(ofstream& out) const;
+    void loadBorrowedResource(LibraryResource* resource);
 };
 
 #endif
-

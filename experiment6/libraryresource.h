@@ -32,6 +32,8 @@ public:
 
     virtual bool increaseQuantity(int amount) = 0;
     virtual bool decreaseQuantity(int amount) = 0;
+    
+    virtual int getTotalQuantity() const = 0;
 };
 
 #endif

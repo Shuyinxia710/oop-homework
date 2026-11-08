@@ -35,6 +35,10 @@ public:
     bool removeStudent(string id);
     void showAllStudents() const;
     int getStudentCount() const;
+
+    bool saveData(string fileName) const;
+    bool loadData(string fileName);
+    void clearData();
 };
 
 #endif

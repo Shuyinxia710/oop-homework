@@ -27,6 +27,11 @@ public:
     int getBorrowedCount() const override;
     bool increaseQuantity(int amount) override;
     bool decreaseQuantity(int amount) override;
+    
+    string getFileFormat() const;
+	string getAccessAddress() const;
+	string getAuthorizationType() const;
+	int getTotalQuantity() const override;
 };
 
 #endif

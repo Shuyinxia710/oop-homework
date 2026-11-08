@@ -114,3 +114,23 @@ bool ElectronicResource::decreaseQuantity(int amount)
     return true;
 }
 
+string ElectronicResource::getFileFormat() const
+{
+    return fileFormat;
+}
+
+string ElectronicResource::getAccessAddress() const
+{
+    return accessAddress;
+}
+
+string ElectronicResource::getAuthorizationType() const
+{
+    return authorizationType;
+}
+
+int ElectronicResource::getTotalQuantity() const
+{
+    return totalLicenses;
+}
+

@@ -26,6 +26,10 @@ public:
 
     bool increaseQuantity(int amount) override;
     bool decreaseQuantity(int amount) override;
+    
+    string getIsbn() const;
+	string getAuthor() const;
+	int getTotalQuantity() const override;
 };
 
 #endif

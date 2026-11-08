@@ -99,3 +99,23 @@ void Student::showBorrowedResources() const
              << endl;
     }
 }
+
+void Student::saveToFile(ofstream& out) const
+{
+    out << studentId << endl;
+    out << name << endl;
+    out << borrowedResources.size() << endl;
+
+    for (size_t i = 0; i < borrowedResources.size(); i++)
+    {
+        out << borrowedResources[i]->getResourceId() << endl;
+    }
+}
+
+void Student::loadBorrowedResource(LibraryResource* resource)
+{
+    if (resource != NULL)
+    {
+        borrowedResources.push_back(resource);
+    }
+}
