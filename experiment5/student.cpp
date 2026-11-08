@@ -1,32 +1,28 @@
-
 #include <iostream>
 #include "student.h"
+#include "library.h"
+#include "libraryresource.h"
 
 using namespace std;
 
-// 构造函数：初始化学生信息
 Student::Student(string id, string n)
 {
     studentId = id;
     name = n;
 }
 
-// 获取学号
 string Student::getStudentId() const
 {
     return studentId;
 }
 
-// 获取姓名
 string Student::getName() const
 {
     return name;
 }
 
-// 借阅资源
 bool Student::borrowResource(Library& library, string resourceId)
 {
-    // 查找资源
     LibraryResource* resource = library.findResource(resourceId);
 
     if (resource == NULL)
@@ -35,76 +31,71 @@ bool Student::borrowResource(Library& library, string resourceId)
         return false;
     }
 
-    // 检查是否已经借过这项资源
     for (size_t i = 0; i < borrowedResources.size(); i++)
     {
         if (borrowedResources[i]->getResourceId() == resourceId)
         {
-            cout << "借阅失败：你已经借过该资源。" << endl;
+            cout << "借阅失败：该学生已经借阅过此资源。" << endl;
             return false;
         }
     }
 
-    // 尝试借阅资源
     if (!resource->borrow())
     {
         return false;
     }
 
-    // 借阅成功后，保存资源指针
     borrowedResources.push_back(resource);
 
-    cout << name << "（" << studentId << "）借阅成功。" << endl;
+    cout << name << "（" << studentId << "）借阅成功！" << endl;
     return true;
 }
 
-// 归还资源
 bool Student::returnResource(string resourceId)
 {
-    for (size_t i = 0; i < borrowedResources.size(); i++)
+    for (vector<LibraryResource*>::iterator it = borrowedResources.begin();
+         it != borrowedResources.end(); ++it)
     {
-        if (borrowedResources[i]->getResourceId() == resourceId)
+        if ((*it)->getResourceId() == resourceId)
         {
-            // 归还资源，释放对应数量或授权
-            if (!borrowedResources[i]->returnResource())
+            if (!(*it)->returnResource())
             {
                 return false;
             }
 
-            // 从借阅记录中移除
-            borrowedResources.erase(borrowedResources.begin() + i);
+            borrowedResources.erase(it);
 
-            cout << name << "（" << studentId << "）归还成功。" << endl;
+            cout << name << "（" << studentId << "）归还成功！" << endl;
             return true;
         }
     }
 
-    cout << "归还失败：你的借阅记录中没有该资源。" << endl;
+    cout << "归还失败：该学生没有借阅此资源。" << endl;
     return false;
 }
 
-// 显示当前借阅记录
+int Student::getBorrowedResourceCount() const
+{
+    return static_cast<int>(borrowedResources.size());
+}
+
 void Student::showBorrowedResources() const
 {
     if (borrowedResources.empty())
     {
-        cout << name << " 当前没有借阅资源。" << endl;
+        cout << name << "当前没有借阅资源。" << endl;
         return;
     }
 
-    cout << "\n学生：" << name << endl;
+    cout << "\n学生姓名：" << name << endl;
     cout << "学号：" << studentId << endl;
     cout << "当前借阅记录：" << endl;
 
     for (size_t i = 0; i < borrowedResources.size(); i++)
     {
-        cout << "资源编号："
-             << borrowedResources[i]->getResourceId()
-             << "，资源名称："
-             << borrowedResources[i]->getName()
-             << "，资源类型："
-             << borrowedResources[i]->getType()
+        cout << "资源编号：" << borrowedResources[i]->getResourceId()
+             << "，资源名称：" << borrowedResources[i]->getName()
+             << "，资源类型：" << borrowedResources[i]->getType()
              << endl;
     }
 }
-

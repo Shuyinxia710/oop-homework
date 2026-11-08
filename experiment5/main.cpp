@@ -5,7 +5,6 @@
 #include "printedbook.h"
 #include "magazine.h"
 #include "electronicresource.h"
-#include "student.h"
 
 using namespace std;
 
@@ -22,6 +21,7 @@ int readInt(const string& prompt)
     while (true)
     {
         cout << prompt;
+
         if (cin >> value)
         {
             clearInput();
@@ -61,17 +61,20 @@ string readString(const string& prompt)
 void showMenu()
 {
     cout << "\n====================================" << endl;
-    cout << "        图书馆借阅管理系统" << endl;
+    cout << "     图书馆借阅管理系统（实验五）" << endl;
     cout << "====================================" << endl;
     cout << "1. 增加新的图书或资源" << endl;
-    cout << "2. 增加已有图书或资源数量" << endl;
-    cout << "3. 显示某一图书或资源情况" << endl;
-    cout << "4. 显示所有图书或资源情况" << endl;
-    cout << "5. 减少已有图书或资源数量" << endl;
-    cout << "6. 删除某一图书或资源" << endl;
-    cout << "7. 学生借阅图书或资源" << endl;
-    cout << "8. 学生归还图书或资源" << endl;
-    cout << "9. 显示当前学生借阅记录" << endl;
+    cout << "2. 增加已有资源数量" << endl;
+    cout << "3. 显示某一资源情况" << endl;
+    cout << "4. 显示所有资源情况" << endl;
+    cout << "5. 减少已有资源数量" << endl;
+    cout << "6. 删除某一资源" << endl;
+    cout << "7. 添加学生" << endl;
+    cout << "8. 删除学生" << endl;
+    cout << "9. 学生借阅资源" << endl;
+    cout << "10. 学生归还资源" << endl;
+    cout << "11. 显示某学生借阅记录" << endl;
+    cout << "12. 显示所有学生" << endl;
     cout << "0. 退出系统" << endl;
     cout << "====================================" << endl;
 }
@@ -86,6 +89,7 @@ LibraryResource* createResource()
         cout << "1. 纸质图书" << endl;
         cout << "2. 杂志" << endl;
         cout << "3. 电子资源" << endl;
+
         type = readInt("请输入选项：");
 
         if (type < 1 || type > 3)
@@ -132,14 +136,9 @@ LibraryResource* createResource()
 int main()
 {
     Library library;
+    int choice;
 
     cout << "========== 欢迎使用图书馆借阅管理系统 ==========" << endl;
-
-    string studentId = readString("请输入当前学生学号：");
-    string studentName = readString("请输入当前学生姓名：");
-    Student student(studentId, studentName);
-
-    int choice;
 
     do
     {
@@ -147,6 +146,7 @@ int main()
         choice = readInt("请选择功能：");
 
         string resourceId;
+        string studentId;
         int amount;
 
         switch (choice)
@@ -185,17 +185,67 @@ int main()
             break;
 
         case 7:
-            resourceId = readString("请输入要借阅的资源编号：");
-            student.borrowResource(library, resourceId);
+        {
+            studentId = readString("请输入学生学号：");
+            string studentName = readString("请输入学生姓名：");
+            library.addStudent(studentId, studentName);
             break;
+        }
 
         case 8:
-            resourceId = readString("请输入要归还的资源编号：");
-            student.returnResource(resourceId);
+            studentId = readString("请输入要删除的学生学号：");
+            library.removeStudent(studentId);
             break;
 
         case 9:
-            student.showBorrowedResources();
+        {
+            studentId = readString("请输入学生学号：");
+            Student* student = library.findStudent(studentId);
+
+            if (student == NULL)
+            {
+                cout << "借阅失败：没有找到该学生。" << endl;
+                break;
+            }
+
+            resourceId = readString("请输入要借阅的资源编号：");
+            student->borrowResource(library, resourceId);
+            break;
+        }
+
+        case 10:
+        {
+            studentId = readString("请输入学生学号：");
+            Student* student = library.findStudent(studentId);
+
+            if (student == NULL)
+            {
+                cout << "归还失败：没有找到该学生。" << endl;
+                break;
+            }
+
+            resourceId = readString("请输入要归还的资源编号：");
+            student->returnResource(resourceId);
+            break;
+        }
+
+        case 11:
+        {
+            studentId = readString("请输入学生学号：");
+            Student* student = library.findStudent(studentId);
+
+            if (student == NULL)
+            {
+                cout << "查询失败：没有找到该学生。" << endl;
+                break;
+            }
+
+            student->showBorrowedResources();
+            break;
+        }
+
+        case 12:
+            library.showAllStudents();
             break;
 
         case 0:
